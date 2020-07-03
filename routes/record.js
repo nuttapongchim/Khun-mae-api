@@ -102,6 +102,7 @@ router.post('/api/v1/record_weight/', verifyToken, (req, res) => {
     const record_date = req.body.date;
     const create_by = req.body.username;
     const create_date = new Date();
+    const log_id = req.body.log_id;
 
     console.log(weight + ',' + userId + ',' + record_date + ',' + create_by + ',' + create_date)
 
@@ -112,15 +113,21 @@ router.post('/api/v1/record_weight/', verifyToken, (req, res) => {
             res.json(result_failed)
             return
         }
-        console.log("Record weight id : " + results.insertId)
-        const result = {
-            type: "success",
-            data: results.insertId
-        };
-        res.json(result)
-        res.end()
+        var queeyString = database.conn.query("UPDATE log_record_weight SET is_recorded = 'Y' WHERE member_id = ? AND id_log_record_weight = ?",[userId,log_id],(error,result)=>{
+         if(error){
+             console.log(queeyString.sql);
+             console.log('Failed to update log record weight id : ' + err);
+             res.json(result_failed);
+             return
+         }
+            res.json({
+                type: "success",
+                data: result
+            });
+            res.end()
+        })
     })
-})
+});
 
 // edit record weight
 router.put('/api/v1/edit_record_weight/', verifyToken, (req, res) => {
