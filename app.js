@@ -94,7 +94,7 @@ function FetchUserId(callback) {
 
 var job = new CronJob('*/5 * * * *', function() {
     console.log("gg");
-    FetchUserId(function (err,data) {
+    FetchToken(function (err,data) {
         if(err){
             console.log(err)
         }else{
