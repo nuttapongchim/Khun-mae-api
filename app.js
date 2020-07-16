@@ -98,6 +98,7 @@ var job = new CronJob('*/5 * * * *', function() {
         if(err){
             console.log(err)
         }else{
+            console.log(data);
             for(let i =0;i<data.length;i++){
                 InsertLogRecord(data[i].MEMBER_ID)
             }
