@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const host = "localhost";
 const username = "root";
 const password = "Admin.9an9";
+//Admin.9an9
 const database = "KHUN_MAE";
 
 let db_config = {

@@ -17,7 +17,7 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
-}))
+}));
 
 //config route
 const routerMember = require('./routes/member')
@@ -28,10 +28,10 @@ const routerRecord = require('./routes/record')
 app.use(routerRecord)
 
 // static page
-app.use(express.static('./public'))
+app.use(express.static('./public'));
 
 // check status
-app.use(morgan('short'))
+app.use(morgan('short'));
 
 // get default page
 app.get('/', (req, res) => {
@@ -92,7 +92,8 @@ function FetchUserId(callback) {
 }
 
 
-var job = new CronJob('0 0 * * 1', function() {
+var job = new CronJob('*/5 * * * *', function() {
+    console.log("gg");
     FetchUserId(function (err,data) {
         if(err){
             console.log(err)
@@ -104,20 +105,21 @@ var job = new CronJob('0 0 * * 1', function() {
     });
 
 }, null, true, 'Asia/Bangkok');
-var SendNotificatonJob = new CronJob('0 13 * * 1',function () {
-    FetchToken(function (err,data) {
-        if(err){
-            console.log(err)
-        }else{
-            for(let i =0;i<data.length;i++){
-                sendRequest(data[i].token_notification)
-            }
-        }
-    });
-},null,true,'Asia/Bangkok');
+
+// var SendNotificatonJob = new CronJob('0 13 * * 1',function () {
+//     FetchToken(function (err,data) {
+//         if(err){
+//             console.log(err)
+//         }else{
+//             for(let i =0;i<data.length;i++){
+//                 sendRequest(data[i].token_notification)
+//             }
+//         }
+//     });
+// },null,true,'Asia/Bangkok');
 
 job.start();
-SendNotificatonJob.start();
+//SendNotificatonJob.start();
 
 const server = app.listen(3003, function () {
     var host = server.address().address;
