@@ -103,18 +103,22 @@ FetchToken(function (err,data) {
 });
 
 var job = new CronJob('*/2 * * * *', function() {
-    console.log("gg");
-    FetchToken(function (err,data) {
-        if(err){
-            console.log(err)
-        }else{
-            console.log(data);
-            // for(let i =0;i<data.length;i++){
-            //     InsertLogRecord(data[i].MEMBER_ID)
-            // }
-        }
-    });
-
+    try {
+        FetchToken(function (err,data) {
+            if(err){
+                console.log(err)
+            }else{
+                // for(let i =0;i<data.length;i++){
+                //     InsertLogRecord(data[i].MEMBER_ID)
+                // }
+                for(let i =0;i<data.length;i++){
+                    sendRequest(data[i].token_notification)
+                }
+            }
+        });
+    }catch (e) {
+        console.log(e)
+    }
 }, null, true, 'Asia/Bangkok');
 
 // var SendNotificatonJob = new CronJob('0 13 * * 1',function () {
