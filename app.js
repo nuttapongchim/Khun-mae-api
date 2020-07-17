@@ -102,24 +102,24 @@ FetchToken(function (err,data) {
     }
 });
 
-var job = new CronJob('*/2 * * * *', function() {
-    try {
-        FetchToken(function (err,data) {
-            if(err){
-                console.log(err)
-            }else{
-                // for(let i =0;i<data.length;i++){
-                //     InsertLogRecord(data[i].MEMBER_ID)
-                // }
-                for(let i =0;i<data.length;i++){
-                    sendRequest(data[i].token_notification)
-                }
-            }
-        });
-    }catch (e) {
-        console.log(e)
-    }
-}, null, true, 'Asia/Bangkok');
+// var job = new CronJob('*/2 * * * *', function() {
+//     try {
+//         FetchToken(function (err,data) {
+//             if(err){
+//                 console.log(err)
+//             }else{
+//                 // for(let i =0;i<data.length;i++){
+//                 //     InsertLogRecord(data[i].MEMBER_ID)
+//                 // }
+//                 for(let i =0;i<data.length;i++){
+//                     sendRequest(data[i].token_notification)
+//                 }
+//             }
+//         });
+//     }catch (e) {
+//         console.log(e)
+//     }
+// }, null, true, 'Asia/Bangkok');
 
 // var SendNotificatonJob = new CronJob('0 13 * * 1',function () {
 //     FetchToken(function (err,data) {
@@ -133,7 +133,7 @@ var job = new CronJob('*/2 * * * *', function() {
 //     });
 // },null,true,'Asia/Bangkok');
 
-job.start();
+// job.start();
 //SendNotificatonJob.start();
 
 const server = app.listen(3003, function () {
