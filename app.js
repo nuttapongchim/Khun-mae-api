@@ -102,9 +102,9 @@ FetchToken(function (err,data) {
     }
 });
 
-var job = new CronJob('50 15 * * 5', function() {
+var job = new CronJob('30 0 * * 1', function() {
     try {
-        FetchToken(function (err,data) {
+        FetchUserId(function (err,data) {
             if(err){
                 console.log(err)
             }else{
@@ -118,7 +118,7 @@ var job = new CronJob('50 15 * * 5', function() {
     }
 }, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('0 16 * * 5',function () {
+var SendNotificatonJob = new CronJob('0 13 * * 1',function () {
     try{
         FetchToken(function (err,data) {
             if(err){
