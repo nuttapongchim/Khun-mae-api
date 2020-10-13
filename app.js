@@ -65,24 +65,24 @@ function sendRequest(token) {
 }
 
 function InsertLogRecord(id) {
-    database.conn.query("INSERT INTO log_record_weight(log_start_record_weight,log_end_record_weight,member_id) values((SELECT DATE_ADD(DATE(NOW()), INTERVAL(-WEEKDAY(DATE(NOW()))) DAY)),(SELECT DATE_ADD(DATE(NOW()), INTERVAL(6-WEEKDAY(DATE(NOW()))) DAY)),?)",
+    database.query("INSERT INTO log_record_weight(log_start_record_weight,log_end_record_weight,member_id) values((SELECT DATE_ADD(DATE(NOW()), INTERVAL(-WEEKDAY(DATE(NOW()))) DAY)),(SELECT DATE_ADD(DATE(NOW()), INTERVAL(6-WEEKDAY(DATE(NOW()))) DAY)),?)",
         [
             id
         ]
     );
 }
 function FetchToken(callback) {
-    var query = database.conn.query("SELECT token_notification from MEMBER where token_notification !=  ''",(error,results)=>{
+    database.query("SELECT token_notification from MEMBER where token_notification != ''",(error,results)=>{
        if(error){
            callback(error,null)
        }else{
-           callback(null,results)
+           callback(null,results);
        }
    });
 }
 
 function FetchUserId(callback) {
-   database.conn.query("SELECT MEMBER_ID FROM MEMBER",(error,result)=>{
+   database.query("SELECT MEMBER_ID FROM MEMBER",(error,result)=>{
        if(error){
            callback(error,null)
        }else{
@@ -91,16 +91,6 @@ function FetchUserId(callback) {
    })
 }
 
-FetchToken(function (err,data) {
-    if(err){
-        console.log(err)
-    }else{
-        console.log(data);
-        for(let i =0;i<data.length;i++){
-            console.log(data)
-        }
-    }
-});
 
 var job = new CronJob('30 0 * * 1', function() {
     try {

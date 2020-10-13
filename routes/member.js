@@ -56,13 +56,13 @@ router.post('/api/v1/create_member', (req, res) => {
     const bmi = weight / ((height / 100) * (height / 100));
     const create_date = new Date();
     const queryString = "INSERT INTO `MEMBER` (MEMBER_USERNAME,MEMBER_PASSWORD,MEMBER_FIRSTNAME,MEMBER_LASTNAME,MEMBER_WEIGHT,MEMBER_HEIGHT,MEMBER_GESTATION_AGE,MEMBER_BMI,MEMBER_BIRTHDATE,CREATE_BY,CREATE_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    database.conn.query(queryString, [username, password, firstname, lastname, weight, height, gestation_age, bmi, birthdate, username, create_date], (err, results, fields) => {
+    database.query(queryString, [username, password, firstname, lastname, weight, height, gestation_age, bmi, birthdate, username, create_date], (err, results, fields) => {
         if (err) {
             console.log('Failed to create member : ' + err)
             res.json(result_failed)
             return
         }
-        database.conn.query("INSERT INTO log_record_weight(log_start_record_weight,log_end_record_weight,member_id) values((SELECT DATE_ADD(DATE(NOW()), INTERVAL(-WEEKDAY(DATE(NOW()))) DAY)),(SELECT DATE_ADD(DATE(NOW()), INTERVAL(6-WEEKDAY(DATE(NOW()))) DAY)),?)",
+        database.query("INSERT INTO log_record_weight(log_start_record_weight,log_end_record_weight,member_id) values((SELECT DATE_ADD(DATE(NOW()), INTERVAL(-WEEKDAY(DATE(NOW()))) DAY)),(SELECT DATE_ADD(DATE(NOW()), INTERVAL(6-WEEKDAY(DATE(NOW()))) DAY)),?)",
             [
                 results.insertId
             ]
@@ -72,7 +72,7 @@ router.post('/api/v1/create_member', (req, res) => {
             type: "success",
             data: results.insertId
         };
-        res.json(result)
+        res.json(result);
         res.end()
     })
 })
@@ -81,7 +81,7 @@ router.post('/api/v1/create_member', (req, res) => {
 router.get('/api/v1/check_member/:username', (req, res) => {
     const username = req.params.username;
     const queryString = "SELECT MEMBER_USERNAME FROM MEMBER WHERE MEMBER_USERNAME = ?";
-    database.conn.query(queryString, [username], (err, rows, fields) => {
+    database.query(queryString, [username], (err, rows, fields) => {
         if (err) {
             console.log('Failed to query for members : ' + err)
             res.sendStatus(500)
@@ -107,7 +107,7 @@ router.post('/api/v1/check_login', (req, res) => {
     const username = req.body.username
     console.log(`username = ${username}`)
     const password = req.body.password
-    var hello = database.conn.query(`SELECT MEMBER_ID, MEMBER_USERNAME, MEMBER_PASSWORD, MEMBER_GESTATION_AGE,MEMBER_WEIGHT, CREATE_DATE FROM MEMBER WHERE MEMBER_USERNAME = ?`, [req.body.username], (err, results, fields) => {
+    var hello = database.query(`SELECT MEMBER_ID, MEMBER_USERNAME, MEMBER_PASSWORD, MEMBER_GESTATION_AGE,MEMBER_WEIGHT, CREATE_DATE FROM MEMBER WHERE MEMBER_USERNAME = ?`, [req.body.username], (err, results, fields) => {
         if (err) {
             console.log(hello.sql);
             console.log('Failed to create member : ' + err);
@@ -156,7 +156,7 @@ router.put('/api/v1/edit_member', (req, res) => {
 
     const queryString = "UPDATE MEMBER SET MEMBER_FIRSTNAME = ?, MEMBER_LASTNAME = ?,MEMBER_BIRTHDATE = ?,MEMBER_WEIGHT = ?,MEMBER_HEIGHT = ?,MEMBER_BMI = ?, MEMBER_GESTATION_AGE = ? WHERE MEMBER_ID = ?"
 
-    database.conn.query(queryString, [firstname, lastname, birthdate, weight, height, bmi, gestation_age, memberId], (err, results, fields) => {
+    database.query(queryString, [firstname, lastname, birthdate, weight, height, bmi, gestation_age, memberId], (err, results, fields) => {
         if (err) {
             console.log('Failed to create edit member id : ' + err)
             res.json(result_failed)
@@ -171,11 +171,11 @@ router.put('/api/v1/edit_member', (req, res) => {
     })
 })
 
-// delete member 
+// delete member
 router.delete('/api/v1/delete_member/:id', verifyToken, (req, res) => {
     const memberId = req.body.id;
     const queryString = "DELETE FROM MEMBER WHERE MEMBER_ID = ?"
-    database.conn.query(queryString, [memberId], (err, results, fields) => {
+    database.query(queryString, [memberId], (err, results, fields) => {
         if (err) {
             console.log('Failed to delete member by id : ' + err)
             res.sendStatus(500)
