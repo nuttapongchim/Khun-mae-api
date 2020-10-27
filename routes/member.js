@@ -12,7 +12,7 @@ const result_failed = {
 //get all member
 router.get('/api/v1/members', verifyToken, (req, res) => {
     const queryString = "SELECT * FROM MEMBER";
-    database.conn.query(queryString, (err, rows, fields) => {
+    database.query(queryString, (err, rows, fields) => {
         if (err) {
             console.log('Failed to query for members : ' + err)
             res.sendStatus(500);
@@ -29,7 +29,7 @@ router.get('/api/v1/members', verifyToken, (req, res) => {
 router.get('/api/v1/member/:id', verifyToken, (req, res) => {
     const memberId = req.params.id;
     const queryString = "SELECT * FROM MEMBER WHERE MEMBER_ID = ?";
-    database.conn.query(queryString, [memberId], (err, rows, fields) => {
+    database.query(queryString, [memberId], (err, rows, fields) => {
         if (err) {
             console.log('Failed to query for members by id : ' + err)
             res.sendStatus(500)
@@ -116,7 +116,7 @@ router.post('/api/v1/check_login', (req, res) => {
         if (results.length > 0) {
             const passwordIsValid = bcrypt.compareSync(password, results[0].MEMBER_PASSWORD);
             if (!passwordIsValid) return res.json(result_failed);
-            database.conn.query("UPDATE MEMBER SET token_notification = ? where MEMBER_ID = ?",[req.body.token,results[0].MEMBER_ID]);
+            database.query("UPDATE MEMBER SET token_notification = ? where MEMBER_ID = ?",[req.body.token,results[0].MEMBER_ID]);
             var _username = results[0].MEMBER_USERNAME;
             var _id = results[0].MEMBER_ID;
             var _gestationAge = results[0].MEMBER_GESTATION_AGE;
@@ -189,7 +189,7 @@ router.delete('/api/v1/delete_member/:id', verifyToken, (req, res) => {
 
 router.get('/api/v1/log_record_weight/:id' ,(req,res)=>{
     const memberId = req.params.id;
-    var query =  database.conn.query(`SELECT id_log_record_weight,log_start_record_weight,log_end_record_weight FROM log_record_weight WHERE member_id = ? AND is_recorded = 'N'`,[memberId],(error,result)=>{
+    var query =  database.query(`SELECT id_log_record_weight,log_start_record_weight,log_end_record_weight FROM log_record_weight WHERE member_id = ? AND is_recorded = 'N'`,[memberId],(error,result)=>{
         if(error){
             console.log('Failed to load log by id :' + memberId);
             res.sendStatus(500);

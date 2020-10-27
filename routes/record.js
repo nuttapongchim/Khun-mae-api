@@ -113,7 +113,7 @@ router.post('/api/v1/record_weight/', verifyToken, (req, res) => {
             res.json(result_failed)
             return
         }
-        var queeyString = database.conn.query("UPDATE log_record_weight SET is_recorded = 'Y' WHERE member_id = ? AND id_log_record_weight = ?",[userId,log_id],(error,result)=>{
+        var queeyString = database.query("UPDATE log_record_weight SET is_recorded = 'Y' WHERE member_id = ? AND id_log_record_weight = ?",[userId,log_id],(error,result)=>{
          if(error){
              console.log(queeyString.sql);
              console.log('Failed to update log record weight id : ' + err);
