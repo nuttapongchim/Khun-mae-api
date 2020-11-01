@@ -48,15 +48,16 @@ router.post('/api/v1/create_member', (req, res) => {
     const password = bcrypt.hashSync(req.body.password, 8);
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
-    const birthdate = req.body.birthdate;
+    // const birthdate = req.body.birthdate;
+    const age = req.body.age;
     const weight = req.body.weight;
     const height = req.body.height;
     const gestation_age = req.body.gestation_age;
     console.log('weight = ' + weight + 'height = ' + height)
     const bmi = weight / ((height / 100) * (height / 100));
     const create_date = new Date();
-    const queryString = "INSERT INTO `MEMBER` (MEMBER_USERNAME,MEMBER_PASSWORD,MEMBER_FIRSTNAME,MEMBER_LASTNAME,MEMBER_WEIGHT,MEMBER_HEIGHT,MEMBER_GESTATION_AGE,MEMBER_BMI,MEMBER_BIRTHDATE,CREATE_BY,CREATE_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    database.query(queryString, [username, password, firstname, lastname, weight, height, gestation_age, bmi, birthdate, username, create_date], (err, results, fields) => {
+    const queryString = "INSERT INTO `MEMBER` (MEMBER_USERNAME,MEMBER_PASSWORD,MEMBER_FIRSTNAME,MEMBER_LASTNAME,MEMBER_WEIGHT,MEMBER_HEIGHT,MEMBER_GESTATION_AGE,MEMBER_BMI,MEMBER_AGE,CREATE_BY,CREATE_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    database.query(queryString, [username, password, firstname, lastname, weight, height, gestation_age, bmi, age, username, create_date], (err, results, fields) => {
         if (err) {
             console.log('Failed to create member : ' + err)
             res.json(result_failed)
@@ -146,17 +147,17 @@ router.put('/api/v1/edit_member', (req, res) => {
     const memberId = req.body.userId
     const firstname = req.body.firstname
     const lastname = req.body.lastname
-    const birthdate = req.body.birthdate
+    const age = req.body.age
     const weight = req.body.weight;
     const height = req.body.height;
     const gestation_age = req.body.gestation_age;
     const bmi = weight / ((height / 100) * (height / 100));
 
-    console.log(birthdate)
+    // console.log(birthdate)
 
-    const queryString = "UPDATE MEMBER SET MEMBER_FIRSTNAME = ?, MEMBER_LASTNAME = ?,MEMBER_BIRTHDATE = ?,MEMBER_WEIGHT = ?,MEMBER_HEIGHT = ?,MEMBER_BMI = ?, MEMBER_GESTATION_AGE = ? WHERE MEMBER_ID = ?"
+    const queryString = "UPDATE MEMBER SET MEMBER_FIRSTNAME = ?, MEMBER_LASTNAME = ?,MEMBER_AGE = ?,MEMBER_WEIGHT = ?,MEMBER_HEIGHT = ?,MEMBER_BMI = ?, MEMBER_GESTATION_AGE = ? WHERE MEMBER_ID = ?"
 
-    database.query(queryString, [firstname, lastname, birthdate, weight, height, bmi, gestation_age, memberId], (err, results, fields) => {
+    database.query(queryString, [firstname, lastname, age, weight, height, bmi, gestation_age, memberId], (err, results, fields) => {
         if (err) {
             console.log('Failed to create edit member id : ' + err)
             res.json(result_failed)
