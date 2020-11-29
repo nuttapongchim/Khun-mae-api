@@ -95,7 +95,7 @@ function FetchUserId(callback) {
 }
 
 
-var job = new CronJob('10 01 * * 0', function () {
+var job = new CronJob('18 01 * * 1', function () {
     try {
         FetchUserId(function (err, data) {
             if (err) {
@@ -114,7 +114,7 @@ var job = new CronJob('10 01 * * 0', function () {
     }
 }, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('12 01 * * 0', function () {
+var SendNotificatonJob = new CronJob('19 01 * * 1', function () {
     try {
         FetchToken(function (err, data) {
             if (err) {
