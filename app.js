@@ -50,11 +50,14 @@ function sendRequest(token) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(
-            {"to":token,"priority":"high",
+            {
+                "to": token, "priority": "high",
                 "notification":
-                    {"body":"ถึงเวลาชั่งน้ำหนักแล้ว คุณแม่",
-                        "title":"คุณแม่ ! ถึงเวลาชั่งน้ำหนักแล้ว",
-                        "icon":"myicon"}
+                {
+                    "body": "ถึงเวลาชั่งน้ำหนักแล้ว คุณแม่",
+                    "title": "คุณแม่ ! ถึงเวลาชั่งน้ำหนักแล้ว",
+                    "icon": "myicon"
+                }
             })
 
     };
@@ -72,87 +75,74 @@ function InsertLogRecord(id) {
     );
 }
 function FetchToken(callback) {
-    database.query("SELECT token_notification from MEMBER where token_notification != ''",(error,results)=>{
-       if(error){
-           callback(error,null)
-       }else{
-           callback(null,results);
-       }
-   });
+    database.query("SELECT token_notification from MEMBER where token_notification != ''", (error, results) => {
+        if (error) {
+            callback(error, null)
+        } else {
+            callback(null, results);
+        }
+    });
 }
 
 function FetchUserId(callback) {
-   database.query("SELECT MEMBER_ID FROM MEMBER",(error,result)=>{
-       if(error){
-           callback(error,null)
-       }else{
-           callback(null,result)
-       }
-   })
+    database.query("SELECT MEMBER_ID FROM MEMBER", (error, result) => {
+        if (error) {
+            callback(error, null)
+        } else {
+            callback(null, result)
+        }
+    })
 }
 
 
-var job = new CronJob('02 01 * * 0', function() {
+var job = new CronJob('10 01 * * 0', function () {
     try {
-        FetchUserId(function (err,data) {
-            if(err){
+        FetchUserId(function (err, data) {
+            if (err) {
                 console.log(err)
-            }else{
+            } else {
                 console.log("1_!!!!")
                 //console.log(data[i].MEMBER_ID)
-                for(let i =0;i<data.length;i++){
+                for (let i = 0; i < data.length; i++) {
                     InsertLogRecord(data[i].MEMBER_ID)
                     console.log(data[i].MEMBER_ID)
                 }
             }
         });
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 }, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('04 01 * * 5',function () {
-    try{
-        FetchToken(function (err,data) {
-            if(err){
+var SendNotificatonJob = new CronJob('12 01 * * 0', function () {
+    try {
+        FetchToken(function (err, data) {
+            if (err) {
                 console.log(err)
-            }else{
+            } else {
                 console.log("2_!!!!")
                 // console.log(data[i].token_notification)
-                for(let i =0;i<data.length;i++){
+                for (let i = 0; i < data.length; i++) {
                     sendRequest(data[i].token_notification)
                     console.log(data[i].token_notification)
                 }
             }
         });
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
-},null,true,'Asia/Bangkok');
+}, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('00 57 * * 5',function () {
-    try{
-        FetchToken(function (err,data) {
-            if(err){
-                console.log(err)
-            }else{
-                console.log("2_!!!!")
-                // console.log(data[i].token_notification)
-                for(let i =0;i<data.length;i++){
-                    sendRequest(data[i].token_notification)
-                    console.log(data[i].token_notification)
-                }
-            }
-        });
-    }catch (e) {
-        console.log(e)
-    }
-},null,true,'Asia/Bangkok');
+var testCron = new CronJob("* * * * *", function () {
+   console.log("It works.")
+})
+
 
 
 
 job.start();
 SendNotificatonJob.start();
+testCron.start()
 
 const server = app.listen(3003, function () {
     var host = server.address().address;
