@@ -95,7 +95,7 @@ function FetchUserId(callback) {
 }
 
 
-var job = new CronJob('18 01 * * 1', function () {
+var job = new CronJob('24 01 * * 1', function () {
     try {
         FetchUserId(function (err, data) {
             if (err) {
@@ -114,7 +114,7 @@ var job = new CronJob('18 01 * * 1', function () {
     }
 }, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('19 01 * * 1', function () {
+var SendNotificatonJob = new CronJob('25 01 * * 1', function () {
     try {
         FetchToken(function (err, data) {
             if (err) {
@@ -123,7 +123,7 @@ var SendNotificatonJob = new CronJob('19 01 * * 1', function () {
                 console.log("2_!!!!")
                 // console.log(data[i].token_notification)
                 for (let i = 0; i < data.length; i++) {
-                    sendRequest(data[i].token_notification)
+                    // sendRequest(data[i].token_notification)
                     console.log(data[i].token_notification)
                 }
             }
