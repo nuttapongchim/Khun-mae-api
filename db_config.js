@@ -2,8 +2,8 @@
 //
 const host = "localhost";
 const username = "root";
-const password = "4321";
-// const password = "Admin.9an9";
+//const password = "4321";
+const password = "Admin.9an9";
 //Admin.9an9
 const database = "KHUN_MAE";
 //

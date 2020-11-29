@@ -92,14 +92,17 @@ function FetchUserId(callback) {
 }
 
 
-var job = new CronJob('30 0 * * 1', function() {
+var job = new CronJob('00 55 * * 0', function() {
     try {
         FetchUserId(function (err,data) {
             if(err){
                 console.log(err)
             }else{
+                console.log("1_!!!!")
+                //console.log(data[i].MEMBER_ID)
                 for(let i =0;i<data.length;i++){
                     InsertLogRecord(data[i].MEMBER_ID)
+                    console.log(data[i].MEMBER_ID)
                 }
             }
         });
@@ -108,14 +111,17 @@ var job = new CronJob('30 0 * * 1', function() {
     }
 }, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('0 13 * * 1',function () {
+var SendNotificatonJob = new CronJob('00 57 * * 5',function () {
     try{
         FetchToken(function (err,data) {
             if(err){
                 console.log(err)
             }else{
+                console.log("2_!!!!")
+                // console.log(data[i].token_notification)
                 for(let i =0;i<data.length;i++){
                     sendRequest(data[i].token_notification)
+                    console.log(data[i].token_notification)
                 }
             }
         });
