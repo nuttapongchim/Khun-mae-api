@@ -135,7 +135,9 @@ var SendNotificatonJob = new CronJob('12 01 * * 0', function () {
 
 var testCron = new CronJob("* * * * *", function () {
    console.log("It works.")
-})
+   console.log(new Date().getHours())
+   console.log(new Date().getMinutes())
+}, null, true, 'Asia/Bangkok')
 
 
 
