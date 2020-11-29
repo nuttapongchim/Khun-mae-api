@@ -95,17 +95,14 @@ function FetchUserId(callback) {
 }
 
 
-var job = new CronJob('24 01 * * 1', function () {
+var job = new CronJob('30 00 * * 1', function () {
     try {
         FetchUserId(function (err, data) {
             if (err) {
                 console.log(err)
             } else {
-                console.log("1_!!!!")
-                //console.log(data[i].MEMBER_ID)
                 for (let i = 0; i < data.length; i++) {
                     InsertLogRecord(data[i].MEMBER_ID)
-                    console.log(data[i].MEMBER_ID)
                 }
             }
         });
@@ -114,17 +111,14 @@ var job = new CronJob('24 01 * * 1', function () {
     }
 }, null, true, 'Asia/Bangkok');
 
-var SendNotificatonJob = new CronJob('25 01 * * 1', function () {
+var SendNotificatonJob = new CronJob('00 13 * * 1', function () {
     try {
         FetchToken(function (err, data) {
             if (err) {
                 console.log(err)
             } else {
-                console.log("2_!!!!")
-                // console.log(data[i].token_notification)
                 for (let i = 0; i < data.length; i++) {
-                    // sendRequest(data[i].token_notification)
-                    console.log(data[i].token_notification)
+                    sendRequest(data[i].token_notification)
                 }
             }
         });
@@ -133,18 +127,8 @@ var SendNotificatonJob = new CronJob('25 01 * * 1', function () {
     }
 }, null, true, 'Asia/Bangkok');
 
-var testCron = new CronJob("* * * * *", function () {
-   console.log("It works.")
-   console.log(new Date().getHours())
-   console.log(new Date().getMinutes())
-}, null, true, 'Asia/Bangkok')
-
-
-
-
 job.start();
 SendNotificatonJob.start();
-testCron.start()
 
 const server = app.listen(3003, function () {
     var host = server.address().address;
